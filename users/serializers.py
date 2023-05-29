@@ -1,11 +1,25 @@
 from rest_framework import serializers
-from users.models import (Students,Orders)
+from users.models import (Students,Orders,StudentsAddress)
 class Studentsserializers(serializers.ModelSerializer):
     class Meta:
         model = Students
         fields ='__all__'
-
+    
 class Ordersserializers(serializers.ModelSerializer):
     class Meta:
         model = Orders
         fields='__all__'
+
+class StudentsAddressserializers(serializers.ModelSerializer):
+    class Meta:
+        model = StudentsAddress
+        fields='__all__'
+    
+    
+class StudentDetailsAddressserializers(serializers.ModelSerializer):
+    address = StudentsAddressserializers
+    class Meta:
+            model = Students
+            fields=('first_name','last_name','mobile_number','address')
+           
+    
