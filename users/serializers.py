@@ -17,7 +17,7 @@ class StudentsAddressserializers(serializers.ModelSerializer):
     
     
 class StudentDetailsAddressserializers(serializers.ModelSerializer):
-    address = StudentsAddressserializers
+    address = StudentsAddressserializers(many=True)
     class Meta:
             model = Students
             fields=('first_name','last_name','mobile_number','address')
