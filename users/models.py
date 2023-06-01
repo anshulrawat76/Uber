@@ -15,7 +15,7 @@ class Students(models.Model):
     choices = GENDER_TYPES,
     default = 1)
     def __str__(self):
-        return str(self.first_name,)
+        return str(self.first_name)
 
 class Orders(models.Model):
     
