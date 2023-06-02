@@ -10,59 +10,92 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.models import*
 from users.serializers import*
 
-class GetsStudentsView(APIView):
+class GetStudentsView(APIView):
     
     def get(self,request):
         print("req",request.GET)
-        name=request.data.get("myname")
+        name = request.GET.get("myname")
         print("name",name)
         if name:
             instance = Students.objects.filter(first_name = name)
         else:
-        
-             instance = Students.objects.all()
-             serializers = Studentsserializers(instance,many=True)
-             return Response(serializers.data)
-    def post(self,request):
-        params = request.data
-        print("Params",params)
-        serializers= Studentsserializers(data=params)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        return Response(("Message","done"))
-class GetsOrdersView(APIView):
+          instance = Students.objects.all()
+        serializer = StudentsSerializers(instance,many=True)
+        return Response(serializer.data)
     
+    def post(self,request):
+        
+        params = request.data
+        print("params",params)
+
+        serializer = StudentsSerializers(data=params)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"messege","Done"})
+    
+class GetOrdersViews(APIView):
     def get(self,request):
         print("req",request.GET)
-        name=request.data.get("myname")
+        name = request.GET.get("myname")
         print("name",name)
         if name:
-            instance = Orders.objects.filter(first_name = name)
+            instance = Orders.objects.filter(order_name = name)
         else:
-        
-             instance = Orders.objects.all()
-             serializers = Ordersserializers(instance,many=True)
-             return Response(serializers.data)
+          instance = Orders.objects.all()
+        serializer = OrdersSerializers(instance,many=True)
+        return Response(serializer.data)
+    
     def post(self,request):
+        
         params = request.data
-        print("Params",params)
-        serializers= Ordersserializers(data=params)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        return Response(("message","done"))
-                    
+        print("params",params)
+
+        serializer = OrdersSerializers(data=params)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"messege","Done"})
+    
 class DeleteStudentsView(APIView):
     def get(self,request,pk):
         instance = Students.objects.get(id=pk)
         instance.delete()
-        return Response({"message","delete"})
+        
+        return Response({"messege","delete"}) 
     
 class StudentsDetailsAddressViews(APIView):
     def get(self,request,pk):
         instance = Students.objects.filter(id=pk)
         serializer = StudentsDetailsAddressSerializers(instance,many=True)
         
-        return Response(serializer.data) 
+        return Response(serializer.data)
+
+class StudentsAddressDeleteView(APIView):
+    def get(self,request,pk):
+        instance = Students.objects.get(id=pk)
+        addresses = StudentsAddress.objects.filter(students=instance)
+        addresses.delete()
+        return Response({"messege_successfully"})
+    
+class StudentsUpdateView(APIView):
+     def post(self,request,pk):
+        
+        params = request.data
+        print("params",params)
+
+        student = Students.objects.filter(id=pk).update(**params)
+        return Response({"Updated"})
+    
+
+
+    
+    
+    
+    
+    
+    
+
     
 
     
